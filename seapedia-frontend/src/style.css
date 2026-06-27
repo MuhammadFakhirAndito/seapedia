@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  /* ===== Brand Colors — SEAPEDIA =====
+     Hijau-teal dalam (bukan hijau Tokopedia murni) sebagai warna utama,
+     dipadukan oranye hangat untuk CTA/diskon supaya kontras dan tetap
+     terasa "marketplace Indonesia" tanpa jadi tiruan 1:1.
+  */
+  --color-brand-50: #eefcf6;
+  --color-brand-100: #d6f7e8;
+  --color-brand-200: #aeefd2;
+  --color-brand-300: #76e0b3;
+  --color-brand-400: #3cc890;
+  --color-brand-500: #16a874;
+  --color-brand-600: #0d8a5f;
+  --color-brand-700: #0c6e4d;
+  --color-brand-800: #0d5840;
+  --color-brand-900: #0c4937;
+
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd3;
+  --color-accent-200: #ffd7a5;
+  --color-accent-300: #ffb86c;
+  --color-accent-400: #ff9633;
+  --color-accent-500: #fb7a0f;
+  --color-accent-600: #e25e06;
+  --color-accent-700: #bb4708;
+  --color-accent-800: #95390e;
+  --color-accent-900: #79300f;
+
+  --color-ink-50: #f7f7f6;
+  --color-ink-100: #ececea;
+  --color-ink-200: #d8d6d2;
+  --color-ink-300: #b6b2ab;
+  --color-ink-400: #8c8780;
+  --color-ink-500: #6f6a63;
+  --color-ink-600: #59554f;
+  --color-ink-700: #474440;
+  --color-ink-800: #312f2c;
+  --color-ink-900: #1f1d1b;
+
+  --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-ink-800);
+    background-color: #fafaf9;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  /* Card produk dengan signature "ribbon" diskon terpotong di pojok */
+  .discount-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--color-accent-500);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.18rem 0.5rem 0.18rem 0.4rem;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  }
+
+  .btn-primary {
+    background-color: var(--color-brand-600);
+    color: white;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    transition: background-color 0.15s ease;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-brand-700);
+  }
+  .btn-primary:disabled {
+    background-color: var(--color-ink-200);
+    color: var(--color-ink-400);
+    cursor: not-allowed;
+  }
+}

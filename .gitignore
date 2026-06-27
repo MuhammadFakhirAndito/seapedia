@@ -1,0 +1,16 @@
+# Backend (Laravel)
+seapedia-backend/vendor/
+seapedia-backend/.env
+seapedia-backend/storage/*.key
+seapedia-backend/bootstrap/cache/*.php
+seapedia-backend/.phpunit.result.cache
+
+# Frontend (Vue)
+seapedia-frontend/node_modules/
+seapedia-frontend/dist/
+seapedia-frontend/.env
+
+# Umum
+.DS_Store
+Thumbs.db
+*.log
