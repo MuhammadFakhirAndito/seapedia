@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Buyer\AddressController;
+use App\Http\Controllers\Buyer\CartController;
+use App\Http\Controllers\Buyer\CheckoutController;
+use App\Http\Controllers\Buyer\OrderController as BuyerOrderController;
+use App\Http\Controllers\Buyer\WalletController;
+use App\Http\Controllers\Seller\OrderController as SellerOrderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RoleController;
@@ -27,9 +33,30 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/store', [SellerStoreController::class, 'show']);
         Route::post('/store', [SellerStoreController::class, 'store']);
 
+        Route::get('/orders', [SellerOrderController::class, 'index']);
+        Route::get('/orders/{order}', [SellerOrderController::class, 'show']);
+        
         Route::get('/products', [SellerProductController::class, 'index']);
         Route::post('/products', [SellerProductController::class, 'store']);
         Route::put('/products/{product}', [SellerProductController::class, 'update']);
         Route::delete('/products/{product}', [SellerProductController::class, 'destroy']);
+    });
+
+    Route::middleware('role:buyer')->prefix('buyer')->group(function () {
+    Route::get('/wallet', [WalletController::class, 'show']);
+    Route::post('/wallet/topup', [WalletController::class, 'topup']);
+
+    Route::apiResource('addresses', AddressController::class)->except(['show']);
+
+    Route::get('/cart-items', [CartController::class, 'index']);
+    Route::post('/cart-items', [CartController::class, 'store']);
+    Route::put('/cart-items/{cartItem}', [CartController::class, 'update']);
+    Route::delete('/cart-items/{cartItem}', [CartController::class, 'destroy']);
+    Route::delete('/cart-items', [CartController::class, 'clear']);
+
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+
+    Route::get('/orders', [BuyerOrderController::class, 'index']);
+    Route::get('/orders/{order}', [BuyerOrderController::class, 'show']);
     });
 });
