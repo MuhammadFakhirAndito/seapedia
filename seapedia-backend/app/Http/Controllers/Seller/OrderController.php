@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Seller;
 
+use App\Models\Delivery;
 use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
@@ -73,9 +74,17 @@ class OrderController extends Controller
             'Order diproses oleh Seller, siap diambil Driver.'
         );
 
+        if (! $updated->delivery) {
+            Delivery::create([
+                'order_id'       => $updated->id,
+                'status'         => 'available',
+                'earning_amount' => round($updated->delivery_fee * 0.8, 2),
+            ]);
+        }
+
         return response()->json([
             'message' => 'Order berhasil diproses dan siap untuk pengiriman.',
-            'order' => $updated,
+            'order'   => $updated->load('delivery'),
         ]);
     }
 }

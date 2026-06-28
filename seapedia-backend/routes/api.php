@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Driver\JobController as DriverJobController;
 use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Buyer\ReportController as BuyerReportController;
@@ -77,5 +78,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/promos', [AdminPromoController::class, 'index']);
     Route::get('/promos/{promo}', [AdminPromoController::class, 'show']);
     Route::post('/promos', [AdminPromoController::class, 'store']);
-});
+    });
+
+    Route::middleware('role:driver')->prefix('driver')->group(function () {
+    Route::get('/jobs',                      [DriverJobController::class, 'index']);
+    Route::get('/jobs/{delivery}',           [DriverJobController::class, 'show']);
+    Route::post('/jobs/{delivery}/take',     [DriverJobController::class, 'take']);
+    Route::post('/jobs/{delivery}/complete', [DriverJobController::class, 'complete']);
+    Route::get('/history',                   [DriverJobController::class, 'history']);
+    });
 });
