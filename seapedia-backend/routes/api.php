@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\PromoController as AdminPromoController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
+use App\Http\Controllers\Buyer\ReportController as BuyerReportController;
+use App\Http\Controllers\Seller\ReportController as SellerReportController;
 use App\Http\Controllers\Buyer\AddressController;
 use App\Http\Controllers\Buyer\CartController;
 use App\Http\Controllers\Buyer\CheckoutController;
@@ -35,11 +39,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/orders', [SellerOrderController::class, 'index']);
         Route::get('/orders/{order}', [SellerOrderController::class, 'show']);
-        
+        Route::post('/orders/{order}/process', [\App\Http\Controllers\Seller\OrderController::class, 'process']);
+
         Route::get('/products', [SellerProductController::class, 'index']);
         Route::post('/products', [SellerProductController::class, 'store']);
         Route::put('/products/{product}', [SellerProductController::class, 'update']);
         Route::delete('/products/{product}', [SellerProductController::class, 'destroy']);
+
+        Route::get('/reports/income', [SellerReportController::class, 'income']);
     });
 
     Route::middleware('role:buyer')->prefix('buyer')->group(function () {
@@ -58,5 +65,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/orders', [BuyerOrderController::class, 'index']);
     Route::get('/orders/{order}', [BuyerOrderController::class, 'show']);
+
+    Route::get('/reports/spending', [BuyerReportController::class, 'spending']);
     });
+
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+    Route::get('/vouchers', [AdminVoucherController::class, 'index']);
+    Route::get('/vouchers/{voucher}', [AdminVoucherController::class, 'show']);
+    Route::post('/vouchers', [AdminVoucherController::class, 'store']);
+
+    Route::get('/promos', [AdminPromoController::class, 'index']);
+    Route::get('/promos/{promo}', [AdminPromoController::class, 'show']);
+    Route::post('/promos', [AdminPromoController::class, 'store']);
+});
 });

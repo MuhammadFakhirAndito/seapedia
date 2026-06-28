@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    public function __construct(private OrderService $orderService) {}
+
     /**
      * GET /api/seller/orders
-     *
-     * Daftar order yang masuk ke toko milik Seller yang sedang login.
-     * Level 3 baru sebatas LIHAT — aksi "process order" (pindah status
-     * ke Menunggu Pengirim) baru masuk di Level 4.
      */
     public function index(Request $request): JsonResponse
     {
@@ -47,5 +47,35 @@ class OrderController extends Controller
         }
 
         return response()->json($order);
+    }
+
+    /*
+     * POST /api/seller/orders/{order}/process
+     */
+    public function process(Request $request, int $order): JsonResponse
+    {
+        $store = $request->user()->store;
+        $orderModel = $store?->orders()->find($order);
+
+        if (! $orderModel) {
+            return response()->json(['message' => 'Order tidak ditemukan.'], 404);
+        }
+
+        if ($orderModel->status !== 'sedang_dikemas') {
+            throw ValidationException::withMessages([
+                'status' => "Order tidak bisa diproses karena status saat ini adalah '{$orderModel->status}'.",
+            ]);
+        }
+
+        $updated = $this->orderService->transitionStatus(
+            $orderModel,
+            'menunggu_pengirim',
+            'Order diproses oleh Seller, siap diambil Driver.'
+        );
+
+        return response()->json([
+            'message' => 'Order berhasil diproses dan siap untuk pengiriman.',
+            'order' => $updated,
+        ]);
     }
 }
