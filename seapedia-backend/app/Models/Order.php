@@ -9,7 +9,7 @@ class Order extends Model
         'order_number', 'buyer_id', 'store_id', 'address_id', 'delivery_method',
         'subtotal', 'discount_amount', 'voucher_id', 'promo_id', 'delivery_fee',
         'ppn_amount', 'total_amount', 'status', 'is_refunded', 'is_income_reversed',
-        'is_stock_restored', 'sla_due_at',
+        'is_stock_restored', 'sla_due_at', 'refunded_at',
     ];
 
     protected function casts(): array
@@ -19,6 +19,7 @@ class Order extends Model
             'is_refunded' => 'boolean',
             'is_income_reversed' => 'boolean',
             'is_stock_restored' => 'boolean',
+            'refunded_at' => 'datetime',
         ];
     }
 

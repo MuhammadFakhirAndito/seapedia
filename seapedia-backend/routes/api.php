@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\MonitoringController as AdminMonitoringController;
+use App\Http\Controllers\Admin\OverdueController as AdminOverdueController;
 use App\Http\Controllers\Driver\JobController as DriverJobController;
 use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
@@ -78,6 +80,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/promos', [AdminPromoController::class, 'index']);
     Route::get('/promos/{promo}', [AdminPromoController::class, 'show']);
     Route::post('/promos', [AdminPromoController::class, 'store']);
+
+    Route::get('/monitoring',            [AdminMonitoringController::class, 'summary']);
+    Route::get('/monitoring/users',      [AdminMonitoringController::class, 'users']);
+    Route::get('/monitoring/stores',     [AdminMonitoringController::class, 'stores']);
+    Route::get('/monitoring/products',   [AdminMonitoringController::class, 'products']);
+    Route::get('/monitoring/orders',     [AdminMonitoringController::class, 'orders']);
+    Route::get('/monitoring/deliveries', [AdminMonitoringController::class, 'deliveries']);
+    Route::get('/monitoring/overdue',    [AdminMonitoringController::class, 'overdueOrders']);
+
+    Route::post('/overdue/handle',       [AdminOverdueController::class, 'handle']);
+    Route::post('/simulate-next-day',    [AdminOverdueController::class, 'simulateNextDay']);
     });
 
     Route::middleware('role:driver')->prefix('driver')->group(function () {
