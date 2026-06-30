@@ -16,7 +16,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Cari produk, brand, atau toko"
-              class="w-full h-10 rounded-md pl-4 pr-11 text-sm text-ink-800 placeholder-ink-400 focus:outline-none focus:ring-2 focus:ring-accent-400"
+              class="w-full h-10 rounded-md pl-4 pr-11 text-sm bg-white text-ink-800 placeholder-ink-500 focus:outline-none focus:ring-2 focus:ring-white/70"
             />
             <button
               type="submit"
@@ -129,7 +129,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="Cari produk, brand, atau toko"
-          class="w-full h-9 rounded-md pl-3.5 pr-10 text-sm text-ink-800 placeholder-ink-400 focus:outline-none focus:ring-2 focus:ring-accent-400"
+          class="w-full h-9 rounded-md pl-3.5 pr-10 text-sm bg-white text-ink-800 placeholder-ink-500 focus:outline-none focus:ring-2 focus:ring-white/70"
         />
         <button
           type="submit"

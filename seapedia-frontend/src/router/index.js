@@ -8,7 +8,11 @@ import ProductDetail from '@/pages/public/ProductDetail.vue'
 import Login from '@/pages/public/Login.vue'
 import Register from '@/pages/public/Register.vue'
 import SelectRole from '@/pages/public/SelectRole.vue'
-import DashboardPlaceholder from '@/pages/DashboardPlaceholder.vue'
+import BuyerDashboard from '@/pages/buyer/BuyerDashboard.vue'
+import BuyerCart from '@/pages/buyer/BuyerCart.vue'
+import SellerDashboard from '@/pages/seller/SellerDashboard.vue'
+import DriverDashboard from '@/pages/driver/DriverDashboard.vue'
+import AdminDashboard from '@/pages/admin/AdminDashboard.vue'
 
 const routes = [
   {
@@ -27,34 +31,35 @@ const routes = [
         meta: { requiresAuth: true },
       },
 
-      // Placeholder dashboard per role — diisi lengkap di level berikutnya
       {
         path: 'buyer/dashboard',
         name: 'buyer-dashboard',
-        component: DashboardPlaceholder,
+        component: BuyerDashboard,
         meta: { requiresAuth: true, role: 'buyer' },
-        props: { title: 'Dashboard Pembeli', emoji: '🛒' },
+      },
+      {
+        path: 'buyer/cart',
+        name: 'buyer-cart',
+        component: BuyerCart,
+        meta: { requiresAuth: true, role: 'buyer' },
       },
       {
         path: 'seller/dashboard',
         name: 'seller-dashboard',
-        component: DashboardPlaceholder,
+        component: SellerDashboard,
         meta: { requiresAuth: true, role: 'seller' },
-        props: { title: 'Dashboard Penjual', emoji: '🏪' },
       },
       {
         path: 'driver/dashboard',
         name: 'driver-dashboard',
-        component: DashboardPlaceholder,
+        component: DriverDashboard,
         meta: { requiresAuth: true, role: 'driver' },
-        props: { title: 'Dashboard Pengantar', emoji: '🛵' },
       },
       {
         path: 'admin/dashboard',
         name: 'admin-dashboard',
-        component: DashboardPlaceholder,
+        component: AdminDashboard,
         meta: { requiresAuth: true, role: 'admin' },
-        props: { title: 'Dashboard Admin', emoji: '🛠️' },
       },
     ],
   },
@@ -65,16 +70,10 @@ const router = createRouter({
   routes,
 })
 
-/**
- * Route guard global.
- *
- * Catatan: ini cuma penjaga di sisi FRONTEND untuk pengalaman pengguna
- * (supaya tidak nyasar ke halaman yang salah). Otorisasi SEBENARNYA tetap
- * harus selalu dicek di backend lewat middleware CheckActiveRole — guard
- * di sini TIDAK BOLEH dianggap sebagai satu-satunya proteksi.
- */
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
+
+  await auth.initSession()
 
   if (to.meta.guestOnly && auth.isLoggedIn) {
     return next('/')

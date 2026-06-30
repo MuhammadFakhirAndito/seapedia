@@ -1,19 +1,12 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
 
-/**
- * useAuthStore
- *
- * Menyimpan state autentikasi: data user, daftar role yang dimiliki,
- * dan active_role yang sedang dipakai. Dipakai di seluruh app untuk
- * menentukan navigasi mana yang ditampilkan dan dashboard mana yang
- * bisa diakses (sesuai business rule: otorisasi berdasarkan active_role).
- */
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null, // { id, username, email, active_role, roles: [...] }
     token: localStorage.getItem('seapedia_token') || null,
     loading: false,
+    _sessionPromise: null,
   }),
 
   getters: {
@@ -71,6 +64,21 @@ export const useAuthStore = defineStore('auth', {
         this.user = null
         localStorage.removeItem('seapedia_token')
       }
+    },
+
+    initSession() {
+      if (this._sessionPromise) return this._sessionPromise
+
+      this._sessionPromise = (async () => {
+        if (this.token && !this.user) {
+          try {
+            await this.fetchProfile()
+          } catch {
+          }
+        }
+      })()
+
+      return this._sessionPromise
     },
   },
 })
