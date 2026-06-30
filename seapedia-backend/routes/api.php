@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\ReviewController as PublicReviewController;
 use App\Http\Controllers\Admin\MonitoringController as AdminMonitoringController;
 use App\Http\Controllers\Admin\OverdueController as AdminOverdueController;
 use App\Http\Controllers\Driver\JobController as DriverJobController;
@@ -24,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('public')->group(function () {
     Route::get('/products', [PublicProductController::class, 'index']);
     Route::get('/products/{product}', [PublicProductController::class, 'show']);
+
+    Route::get('/reviews',  [PublicReviewController::class, 'index']);
+    Route::post('/reviews', [PublicReviewController::class, 'store']);
 });
 
 Route::post('/register', [RegisterController::class, 'store']);
