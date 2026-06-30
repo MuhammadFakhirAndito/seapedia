@@ -1,8 +1,17 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 py-6">
-    <h1 class="font-display font-bold text-xl text-ink-900 mb-4">
-      {{ searchQuery ? `Hasil untuk "${searchQuery}"` : 'Semua Produk' }}
-    </h1>
+    <div class="flex items-center gap-3 mb-4">
+      <h1 class="font-display font-bold text-xl text-ink-900">
+        {{ headerTitle }}
+      </h1>
+      <button
+        v-if="categoryFilter"
+        @click="clearCategory"
+        class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full"
+      >
+        {{ categoryFilter }} ✕
+      </button>
+    </div>
 
     <div v-if="loading" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
       <div
@@ -23,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/api/axios'
 import ProductCard from '@/components/product/ProductCard.vue'
@@ -32,12 +41,22 @@ const route = useRoute()
 const products = ref([])
 const loading = ref(true)
 const searchQuery = ref(route.query.q || '')
+const categoryFilter = ref(route.query.category || '')
+
+const headerTitle = computed(() => {
+  if (searchQuery.value) return `Hasil untuk "${searchQuery.value}"`
+  if (categoryFilter.value) return categoryFilter.value
+  return 'Semua Produk'
+})
 
 async function loadProducts() {
   loading.value = true
   try {
     const { data } = await api.get('/public/products', {
-      params: { q: searchQuery.value || undefined },
+      params: {
+        q: searchQuery.value || undefined,
+        category: categoryFilter.value || undefined,
+      },
     })
     products.value = data.data ?? data
   } catch (e) {
@@ -47,10 +66,19 @@ async function loadProducts() {
   }
 }
 
+function clearCategory() {
+  categoryFilter.value = ''
+  const query = { ...route.query }
+  delete query.category
+  history.pushState({}, '', `${route.path}${Object.keys(query).length ? '?' + new URLSearchParams(query) : ''}`)
+  loadProducts()
+}
+
 watch(
-  () => route.query.q,
-  (q) => {
+  () => [route.query.q, route.query.category],
+  ([q, category]) => {
     searchQuery.value = q || ''
+    categoryFilter.value = category || ''
     loadProducts()
   }
 )

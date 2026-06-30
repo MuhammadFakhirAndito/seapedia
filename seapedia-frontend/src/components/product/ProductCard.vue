@@ -5,9 +5,10 @@
   >
     <div class="relative aspect-square bg-ink-50 overflow-hidden">
       <img
-        :src="product.image || placeholderImage"
+        :src="product.image_url || product.image || placeholderImage"
         :alt="product.name"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        @error="$event.target.src = placeholderImage"
       />
       <span v-if="discountPercent" class="discount-ribbon">
         {{ discountPercent }}%
@@ -67,7 +68,7 @@ const props = defineProps({
   product: {
     type: Object,
     required: true,
-    // expected shape: { id, name, price, image, rating, sold_count, store_city, discount_percent }
+    // expected shape: { id, name, price, image_url, rating, sold_count, store_city, discount_percent }
   },
 })
 

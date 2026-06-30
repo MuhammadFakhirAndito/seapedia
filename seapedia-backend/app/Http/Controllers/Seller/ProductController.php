@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -59,7 +60,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product): JsonResponse
     {
-        $this->authorize('update', $product);
+        Gate::authorize('update', $product);
 
         $product->update($request->validated());
 
@@ -74,7 +75,7 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, Product $product): JsonResponse
     {
-        $this->authorize('delete', $product);
+        Gate::authorize('delete', $product);
 
         $product->delete();
 

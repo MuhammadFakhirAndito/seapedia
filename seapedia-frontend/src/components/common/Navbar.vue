@@ -149,13 +149,14 @@
       <!-- Category bar -->
       <div class="flex items-center gap-6 h-10 text-xs text-white/85 overflow-x-auto">
         <RouterLink to="/products" class="hover:text-white whitespace-nowrap">Semua Produk</RouterLink>
-        <span
+        <button
           v-for="cat in categories"
           :key="cat"
-          class="hover:text-white whitespace-nowrap cursor-pointer"
+          @click="handleCategoryClick(cat)"
+          class="hover:text-white whitespace-nowrap cursor-pointer bg-transparent border-0 p-0 text-inherit"
         >
           {{ cat }}
-        </span>
+        </button>
       </div>
     </div>
   </header>
@@ -197,6 +198,10 @@ const dashboardLink = computed(() => {
 function handleSearch() {
   if (!searchQuery.value.trim()) return
   router.push({ path: '/products', query: { q: searchQuery.value } })
+}
+
+function handleCategoryClick(category) {
+  router.push({ path: '/products', query: { category } })
 }
 
 async function handleLogout() {

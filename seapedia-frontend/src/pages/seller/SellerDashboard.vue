@@ -116,6 +116,23 @@
             placeholder="Deskripsi"
             class="border border-ink-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
+          <input
+            v-model="productForm.image_url"
+            type="url"
+            placeholder="Link gambar produk (https://...)"
+            class="border border-ink-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 sm:col-span-2"
+          />
+          <div v-if="productForm.image_url" class="sm:col-span-2">
+          <img
+            :src="productForm.image_url"
+            alt="Preview gambar produk"
+            class="w-20 h-20 object-cover rounded-lg border border-ink-200"
+            @error="imagePreviewError = true"
+          />
+          <p v-if="imagePreviewError" class="text-xs text-red-600 mt-1">
+            Link gambar tidak valid atau tidak bisa dimuat.
+          </p>
+        </div>
         </div>
         <p v-if="productError" class="text-xs text-red-600 mt-2">{{ productError }}</p>
         <div class="flex gap-2 mt-3">
@@ -230,6 +247,9 @@ const tabs = [
   { value: 'orders', label: 'Pesanan' },
 ]
 
+// Image form
+const imagePreviewError = ref(false)
+
 const loading = ref(true)
 const store = ref(null)
 const products = ref([])
@@ -242,7 +262,7 @@ const storeSaving = ref(false)
 const storeError = ref('')
 
 // Product form
-const productForm = ref({ name: '', price: null, stock: null, description: '' })
+const productForm = ref({ name: '', price: null, stock: null, description: '', image_url: '' })
 const editingProductId = ref(null)
 const productSaving = ref(false)
 const productError = ref('')
@@ -300,12 +320,13 @@ function startEditProduct(p) {
     price: p.price,
     stock: p.stock,
     description: p.description ?? '',
+    image_url: p.image_url ?? '',
   }
 }
 
 function cancelEditProduct() {
   editingProductId.value = null
-  productForm.value = { name: '', price: null, stock: null, description: '' }
+  productForm.value = { name: '', price: null, stock: null, description: '', image_url: '' }
   productError.value = ''
 }
 
