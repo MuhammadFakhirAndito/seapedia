@@ -128,6 +128,7 @@ class CheckoutService
                 // Kurangi stock, jangan sampai negatif (sudah divalidasi di atas,
                 // tapi decrement tetap dijaga di level query)
                 $product->decrement('stock', $item->quantity);
+                $product->increment('sold_count', $item->quantity);
             }
 
             // Catat status history awal

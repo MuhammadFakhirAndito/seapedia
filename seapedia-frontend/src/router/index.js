@@ -5,6 +5,7 @@ import GuestLayout from '@/layouts/GuestLayout.vue'
 import Home from '@/pages/public/Home.vue'
 import ProductList from '@/pages/public/ProductList.vue'
 import ProductDetail from '@/pages/public/ProductDetail.vue'
+import StoreProfile from '@/pages/public/StoreProfile.vue'
 import Login from '@/pages/public/Login.vue'
 import Register from '@/pages/public/Register.vue'
 import SelectRole from '@/pages/public/SelectRole.vue'
@@ -22,6 +23,7 @@ const routes = [
       { path: '', name: 'home', component: Home },
       { path: 'products', name: 'products', component: ProductList },
       { path: 'products/:id', name: 'product-detail', component: ProductDetail },
+      { path: 'stores/:id', name: 'store-profile', component: StoreProfile },
       { path: 'login', name: 'login', component: Login, meta: { guestOnly: true } },
       { path: 'register', name: 'register', component: Register, meta: { guestOnly: true } },
       {

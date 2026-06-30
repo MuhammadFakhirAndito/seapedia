@@ -26,6 +26,8 @@ Route::prefix('public')->group(function () {
     Route::get('/products', [PublicProductController::class, 'index']);
     Route::get('/products/{product}', [PublicProductController::class, 'show']);
 
+    Route::get('/stores/{store}', [PublicProductController::class, 'byStore']);
+
     Route::get('/reviews',  [PublicReviewController::class, 'index']);
     Route::post('/reviews', [PublicReviewController::class, 'store']);
 });

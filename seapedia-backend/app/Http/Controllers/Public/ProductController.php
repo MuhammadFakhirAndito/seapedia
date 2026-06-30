@@ -35,6 +35,21 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
+    public function byStore(int $storeId)
+    {
+    $store = \App\Models\Store::findOrFail($storeId);
+
+    $products = \App\Models\Product::where('store_id', $storeId)
+        ->where('is_active', true)
+        ->latest()
+        ->get();
+
+    return response()->json([
+        'store'    => $store,
+        'products' => $products,
+    ]);
+    }
+
     /**
      * GET /api/public/products/{product}
      */

@@ -16,9 +16,10 @@
     <div v-else class="grid md:grid-cols-2 gap-8">
       <div class="aspect-square bg-ink-50 rounded-xl overflow-hidden">
         <img
-          :src="product.image || placeholder"
+          :src="product.image_url || product.image || placeholder"
           :alt="product.name"
           class="w-full h-full object-cover"
+          @error="$event.target.src = placeholder"
         />
       </div>
 
