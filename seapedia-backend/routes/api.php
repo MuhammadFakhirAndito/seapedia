@@ -99,6 +99,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/simulate-next-day',    [AdminOverdueController::class, 'simulateNextDay']);
     });
 
+    
     Route::middleware('role:driver')->prefix('driver')->group(function () {
     Route::get('/jobs',                      [DriverJobController::class, 'index']);
     Route::get('/jobs/{delivery}',           [DriverJobController::class, 'show']);
